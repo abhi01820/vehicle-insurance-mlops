@@ -12,9 +12,63 @@ It demonstrates how machine learning workflows are structured, validated, versio
 The system predicts whether a customer is likely to opt for vehicle insurance based on demographic and policy-related features.
 
 ---
-<p align="center">
-  <img src="banner.png" alt="Local Deployment" width="700">
-</p>
+## 📌 Project Structure
+
+```text
+vehicle-insurance-mlops/
+│
+├── app.py                      # FastAPI entry point for prediction service
+├── Dockerfile                  # Docker configuration for deployment
+├── requirements.txt            # Project dependencies
+├── setup.py                    # Package setup
+├── pyproject.toml              # Build system configuration
+├── README.md                   # Project documentation
+│
+├── config/
+│   ├── schema.yaml             # Dataset schema definition
+│   └── model.yaml              # Model & training configuration
+│
+├── artifact/                   # Versioned pipeline outputs (timestamp-based)
+│   └── <timestamp>/
+│       ├── data_ingestion/     # Raw & split datasets
+│       ├── data_validation/    # Validation reports
+│       ├── data_transformation/# Transformed data & preprocessors
+│       └── model_trainer/      # Trained model artifacts
+│
+├── logs/                       # Centralized pipeline execution logs
+│
+├── notebook/
+│   └── data.csv                # Sample / reference dataset
+│
+├── src/
+│   ├── components/             # Core ML pipeline components
+│   │   ├── data_ingestion.py
+│   │   ├── data_validation.py
+│   │   ├── data_transformation.py
+│   │   ├── model_trainer.py
+│   │   ├── model_evaluation.py
+│   │   └── model_pusher.py
+│   │
+│   ├── pipeline/               # Training & prediction pipelines
+│   │   ├── training_pipeline.py
+│   │   └── prediction_pipeline.py
+│   │
+│   ├── entity/                 # Configuration & artifact data classes
+│   ├── configuration/          # MongoDB / AWS connection logic
+│   ├── cloud_storage/          # AWS S3 interaction layer
+│   ├── data_access/            # Data fetching layer
+│   ├── utils/                  # Common utility functions
+│   ├── logger/                 # Centralized logging module
+│   └── exception/              # Custom exception handling
+│
+├── static/
+│   └── css/
+│       └── style.css           # UI styling
+│
+└── templates/
+    └── vehicledata.html        # HTML template for prediction UI
+
+```
 
 
 ## Why This Is an MLOps Project
@@ -54,9 +108,7 @@ MongoDB
 - Data is fetched dynamically using environment variables
 - No hardcoded credentials are used
 
-Environment variable setup (example):
 
-PowerShell:
 
 
 
