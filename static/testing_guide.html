@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Testing Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        h2 { color: #ff9800; margin-top: 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #ff9800;
+            color: white;
+        }
+        .positive { color: #10b981; font-weight: bold; }
+        .negative { color: #ef4444; font-weight: bold; }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Vehicle Insurance Model - Testing Guide</h1>
+    
+    <div class="box">
+        <h2>Understanding the Prediction Model</h2>
+        <p>The model predicts whether a customer will be interested in vehicle insurance based on patterns learned from training data. The two most important factors are:</p>
+        <ul>
+            <li><strong>Previously Insured:</strong> Customers NOT previously insured are more likely to buy</li>
+            <li><strong>Vehicle Damage:</strong> Customers with damaged vehicles are more likely to buy</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h2>Test Cases to Try</h2>
+        
+        <h3 class="positive">✅ For POSITIVE Response (Customer Likely to Buy):</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+                <th>Why</th>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>Male</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Age</td>
+                <td>40-50</td>
+                <td>Middle-aged customers</td>
+            </tr>
+            <tr>
+                <td>Driving License</td>
+                <td>Yes</td>
+                <td>Can legally drive</td>
+            </tr>
+            <tr>
+                <td>Region Code</td>
+                <td>28.0</td>
+                <td>Common region</td>
+            </tr>
+            <tr>
+                <td><strong>Previously Insured</strong></td>
+                <td><strong>No</strong></td>
+                <td><strong>⭐ KEY: Not currently insured!</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Vehicle Age</strong></td>
+                <td><strong>> 2 Years</strong></td>
+                <td><strong>Older vehicles need insurance</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Vehicle Damage</strong></td>
+                <td><strong>Yes</strong></td>
+                <td><strong>⭐ KEY: Vehicle is damaged!</strong></td>
+            </tr>
+            <tr>
+                <td>Annual Premium</td>
+                <td>40000</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Policy Sales Channel</td>
+                <td>26.0</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Vintage</td>
+                <td>200</td>
+                <td>Days with company</td>
+            </tr>
+        </table>
+
+        <h3 class="negative">❌ For NEGATIVE Response (Customer Unlikely to Buy):</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+                <th>Why</th>
+            </tr>
+            <tr>
+                <td><strong>Previously Insured</strong></td>
+                <td><strong>Yes</strong></td>
+                <td><strong>⭐ Already has insurance!</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Vehicle Damage</strong></td>
+                <td><strong>No</strong></td>
+                <td><strong>⭐ No urgency to insure</strong></td>
+            </tr>
+            <tr>
+                <td>Vehicle Age</td>
+                <td>< 1 Year</td>
+                <td>New vehicle</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center;"><em>Other fields can vary</em></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="note">
+        <strong>📌 Important Note:</strong><br>
+        Your screenshot showed <strong>Previously Insured = Yes</strong> and <strong>Vehicle Damage = No</strong>.<br>
+        This combination will <strong>almost always predict "Negative Response"</strong> because:
+        <ul>
+            <li>Customer already has insurance (Previously Insured = Yes)</li>
+            <li>Vehicle is not damaged (Vehicle Damage = No)</li>
+            <li>Model learned that such customers rarely buy new insurance</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h2>Quick Test Pattern</h2>
+        <p><strong>To see a POSITIVE prediction, try this combination:</strong></p>
+        <ol>
+            <li>Set <strong>Previously Insured = No</strong></li>
+            <li>Set <strong>Vehicle Damage = Yes</strong></li>
+            <li>Set <strong>Vehicle Age = > 2 Years</strong></li>
+            <li>Keep other values at defaults</li>
+        </ol>
+        
+        <p><strong>To see a NEGATIVE prediction:</strong></p>
+        <ol>
+            <li>Set <strong>Previously Insured = Yes</strong></li>
+            <li>Set <strong>Vehicle Damage = No</strong></li>
+            <li>Keep other values at defaults</li>
+        </ol>
+    </div>
+
+    <div class="box">
+        <h2>Model is Working Correctly! ✅</h2>
+        <p>The model isn't broken - it's behaving exactly as trained on real-world data patterns where:</p>
+        <ul>
+            <li>Customers who <strong>don't have insurance</strong> and have <strong>damaged vehicles</strong> are most likely to buy</li>
+            <li>Customers who <strong>already have insurance</strong> or have <strong>undamaged vehicles</strong> are less likely to buy</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -3,56 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Insurance Prediction</title>
+    <title>Vehicle Insurance MLOps Platform</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Vehicle Insurance Prediction</h1>
-        <div class="subtitle">Predict whether a customer will opt for vehicle insurance</div>
+        <header class="header">
+            <h1 class="title">Vehicle Insurance MLOps Platform</h1>
+            <p class="subtitle">Predictive Analytics & Model Management</p>
+        </header>
 
-        <form method="post" action="/">
-            <label>Gender (1 = Male, 0 = Female)</label>
-            <input type="number" name="Gender" min="0" max="1" required>
+        <form method="post" action="/" id="predict-form" class="form">
+            <div class="form-group">
+                <label class="label">Gender</label>
+                <select name="Gender" class="select" required>
+                    <option value="Male" {% if form_data and form_data.Gender == 'Male' %}selected{% elif not form_data %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if form_data and form_data.Gender == 'Female' %}selected{% endif %}>Female</option>
+                </select>
+            </div>
 
-            <label>Age</label>
-            <input type="number" name="Age" required>
+            <div class="form-group">
+                <label class="label">Age</label>
+                <select name="Age" class="select" required>
+                    <option value="">Select Age</option>
+                    {% for age in range(18, 86) %}
+                    <option value="{{ age }}" {% if form_data and form_data.Age == age %}selected{% elif not form_data and age == 44 %}selected{% endif %}>{{ age }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label>Driving License (1 = Yes, 0 = No)</label>
-            <input type="number" name="Driving_License" min="0" max="1" required>
+            <div class="form-group">
+                <label class="label">Driving License</label>
+                <select name="Driving_License" class="select" required>
+                    <option value="1" {% if form_data and form_data.Driving_License == 1 %}selected{% elif not form_data %}selected{% endif %}>Yes</option>
+                    <option value="0" {% if form_data and form_data.Driving_License == 0 %}selected{% endif %}>No</option>
+                </select>
+            </div>
 
-            <label>Region Code</label>
-            <input type="number" step="0.01" name="Region_Code" required>
+            <div class="form-group">
+                <label class="label">Region Code</label>
+                <select name="Region_Code" class="select" required>
+                    <option value="28.0" {% if form_data and form_data.Region_Code == 28.0 %}selected{% elif not form_data %}selected{% endif %}>28.0</option>
+                    <option value="3.0" {% if form_data and form_data.Region_Code == 3.0 %}selected{% endif %}>3.0</option>
+                    <option value="11.0" {% if form_data and form_data.Region_Code == 11.0 %}selected{% endif %}>11.0</option>
+                    <option value="33.0" {% if form_data and form_data.Region_Code == 33.0 %}selected{% endif %}>33.0</option>
+                    <option value="41.0" {% if form_data and form_data.Region_Code == 41.0 %}selected{% endif %}>41.0</option>
+                    <option value="8.0" {% if form_data and form_data.Region_Code == 8.0 %}selected{% endif %}>8.0</option>
+                    <option value="15.0" {% if form_data and form_data.Region_Code == 15.0 %}selected{% endif %}>15.0</option>
+                    <option value="46.0" {% if form_data and form_data.Region_Code == 46.0 %}selected{% endif %}>46.0</option>
+                </select>
+            </div>
 
-            <label>Previously Insured (1 = Yes, 0 = No)</label>
-            <input type="number" name="Previously_Insured" min="0" max="1" required>
+            <div class="form-group">
+                <label class="label">Previously Insured</label>
+                <select name="Previously_Insured" class="select" required>
+                    <option value="0" {% if form_data and form_data.Previously_Insured == 0 %}selected{% elif not form_data %}selected{% endif %}>No</option>
+                    <option value="1" {% if form_data and form_data.Previously_Insured == 1 %}selected{% endif %}>Yes</option>
+                </select>
+            </div>
 
-            <label>Annual Premium</label>
-            <input type="number" step="0.01" name="Annual_Premium" required>
+            <div class="form-group">
+                <label class="label">Vehicle Age</label>
+                <select name="Vehicle_Age" class="select" required>
+                    <option value="< 1 Year" {% if form_data and form_data.Vehicle_Age == '< 1 Year' %}selected{% endif %}>< 1 Year</option>
+                    <option value="1-2 Year" {% if form_data and form_data.Vehicle_Age == '1-2 Year' %}selected{% endif %}>1-2 Year</option>
+                    <option value="> 2 Years" {% if form_data and form_data.Vehicle_Age == '> 2 Years' %}selected{% elif not form_data %}selected{% endif %}>> 2 Years</option>
+                </select>
+            </div>
 
-            <label>Policy Sales Channel</label>
-            <input type="number" step="0.01" name="Policy_Sales_Channel" required>
+            <div class="form-group">
+                <label class="label">Vehicle Damage</label>
+                <select name="Vehicle_Damage" class="select" required>
+                    <option value="Yes" {% if form_data and form_data.Vehicle_Damage == 'Yes' %}selected{% elif not form_data %}selected{% endif %}>Yes</option>
+                    <option value="No" {% if form_data and form_data.Vehicle_Damage == 'No' %}selected{% endif %}>No</option>
+                </select>
+            </div>
 
-            <label>Vintage</label>
-            <input type="number" name="Vintage" required>
+            <div class="form-row">
+                <div class="form-group half">
+                    <label class="label">Annual Premium (₹)</label>
+                    <input type="number" name="Annual_Premium" class="input" value="{% if form_data %}{{ form_data.Annual_Premium }}{% else %}40454{% endif %}" step="0.01" required>
+                </div>
+                <div class="form-group half">
+                    <label class="label">Policy Sales Channel</label>
+                    <input type="number" name="Policy_Sales_Channel" class="input" value="{% if form_data %}{{ form_data.Policy_Sales_Channel }}{% else %}26.0{% endif %}" step="0.01" required>
+                </div>
+            </div>
 
-            <label>Vehicle Age < 1 Year (1 = Yes, 0 = No)</label>
-            <input type="number" name="Vehicle_Age_lt_1_Year" min="0" max="1" required>
+            <div class="form-group">
+                <label class="label">Vintage (Days with Company)</label>
+                <input type="number" name="Vintage" class="input" value="{% if form_data %}{{ form_data.Vintage }}{% else %}217{% endif %}" min="0" required>
+            </div>
 
-            <label>Vehicle Age > 2 Years (1 = Yes, 0 = No)</label>
-            <input type="number" name="Vehicle_Age_gt_2_Years" min="0" max="1" required>
-
-            <label>Vehicle Damage (1 = Yes, 0 = No)</label>
-            <input type="number" name="Vehicle_Damage_Yes" min="0" max="1" required>
-
-            <button type="submit">Predict Insurance Response</button>
+            <button type="submit" class="predict-btn" id="submit-btn">
+                <span class="btn-text">Predict</span>
+                <span class="btn-loading">Predicting...</span>
+            </button>
         </form>
 
-        {% if context %}
-            <div class="result {% if context == 'Response-Yes' %}success{% else %}failure{% endif %}">
-                <h2>{{ context }}</h2>
+        {% if context and context != 'Rendering' %}
+        <div class="result-box {% if context == 'Response-Yes' %}result-positive{% else %}result-negative{% endif %}">
+            <div class="result-content">
+                {% if context == 'Response-Yes' %}
+                <div class="result-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <div class="result-text">
+                    <h3 class="result-title">Positive Response Expected</h3>
+                    <p class="result-description">This customer is likely to be interested in vehicle insurance</p>
+                </div>
+                {% elif context == 'Response-No' %}
+                <div class="result-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="result-text">
+                    <h3 class="result-title">Negative Response Expected</h3>
+                    <p class="result-description">This customer may not be interested in vehicle insurance at this time</p>
+                </div>
+                {% else %}
+                <div class="result-text">
+                    <h3 class="result-title">{{ context }}</h3>
+                </div>
+                {% endif %}
             </div>
+        </div>
         {% endif %}
     </div>
+
+    <script>
+        const form = document.getElementById('predict-form');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        form.addEventListener('submit', function() {
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        });
+    </script>
 </body>
 </html>

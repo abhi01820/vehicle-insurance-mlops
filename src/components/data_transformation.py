@@ -146,15 +146,16 @@ class DataTransformation:
             input_feature_test_arr = preprocessor.transform(input_feature_test_df)
             logging.info("Transformation done end to end to train-test df.")
 
-            logging.info("Applying SMOTEENN for handling imbalanced dataset.")
+            logging.info("Applying SMOTEENN for handling imbalanced dataset (train only).")
             smt = SMOTEENN(sampling_strategy="minority")
             input_feature_train_final, target_feature_train_final = smt.fit_resample(
                 input_feature_train_arr, target_feature_train_df
             )
-            input_feature_test_final, target_feature_test_final = smt.fit_resample(
+            # Do NOT resample the test set; keep original distribution
+            input_feature_test_final, target_feature_test_final = (
                 input_feature_test_arr, target_feature_test_df
             )
-            logging.info("SMOTEENN applied to train-test df.")
+            logging.info("SMOTEENN applied to train df; test df kept original.")
 
             train_arr = np.c_[input_feature_train_final, np.array(target_feature_train_final)]
             test_arr = np.c_[input_feature_test_final, np.array(target_feature_test_final)]

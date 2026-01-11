@@ -1,0 +1,29 @@
+# Ignore Python cache and virtual env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.egg-info/
+.venv/
+venv/
+.env
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.git/
+.gitignore
+
+# Build artifacts and logs
+artifact/
+logs/
+
+# Notebooks and large data
+**/*.ipynb_checkpoints/
+**/*.ipynb
+
+# Node / front-end caches (if any)
+node_modules/
+dist/

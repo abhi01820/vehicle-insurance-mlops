@@ -1,107 +1,322 @@
-/* ===== Global ===== */
-body {
-    font-family: "Inter", "Segoe UI", Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+/* ===== Dark Education Analytics Theme ===== */
+* {
     margin: 0;
-    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* ===== Card ===== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0f1923 0%, #1a2738 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
 .container {
     width: 100%;
-    max-width: 520px;
-    background-color: #ffffff;
-    padding: 28px;
-    border-radius: 14px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
+    max-width: 750px;
+    background: #1a2738;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-/* ===== Title ===== */
-h1 {
-    margin-bottom: 6px;
-    color: #1f2937;
-    font-size: 24px;
+/* ===== Header ===== */
+.header {
     text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ff9800;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
 }
 
 .subtitle {
-    text-align: center;
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 24px;
+    font-size: 16px;
+    color: #94a3b8;
+    font-weight: 400;
 }
 
 /* ===== Form ===== */
-form {
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-/* ===== Inputs ===== */
-label {
-    font-size: 13px;
-    color: #374151;
-    font-weight: 600;
-}
-
-input {
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border 0.2s, box-shadow 0.2s;
-}
-
-input:focus {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-}
-
-/* ===== Button ===== */
-button {
-    margin-top: 10px;
-    padding: 12px;
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 600;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 18px rgba(79, 70, 229, 0.3);
-}
-
-/* ===== Result ===== */
-.result {
-    margin-top: 24px;
-    padding: 16px;
-    border-radius: 10px;
-    background-color: #f1f5f9;
-    text-align: center;
-}
-
-.result h2 {
+.form-group.half {
     margin: 0;
+}
+
+.label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 4px;
+}
+
+/* ===== Select Dropdown ===== */
+.select {
+    width: 100%;
+    padding: 14px 16px;
+    background: #0f1923;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e2e8f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+.select:hover {
+    border-color: #4a5568;
+}
+
+.select:focus {
+    outline: none;
+    border-color: #ff9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+}
+
+.select option {
+    background: #0f1923;
+    color: #e2e8f0;
+    padding: 10px;
+}
+
+/* ===== Input Fields ===== */
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #0f1923;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.input:hover {
+    border-color: #4a5568;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #ff9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+}
+
+.input::placeholder {
+    color: #64748b;
+}
+
+/* ===== Predict Button ===== */
+.predict-btn {
+    width: 100%;
+    padding: 18px 32px;
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
     font-size: 18px;
-    color: #1f2937;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.result.success {
-    background-color: #ecfdf5;
-    color: #065f46;
+.predict-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 152, 0, 0.4);
+    background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%);
 }
 
-.result.failure {
-    background-color: #fef2f2;
-    color: #991b1b;
+.predict-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
+
+.predict-btn .btn-loading {
+    display: none;
+}
+
+.predict-btn.loading .btn-text {
+    display: none;
+}
+
+.predict-btn.loading .btn-loading {
+    display: inline;
+}
+
+/* ===== Result Box ===== */
+.result-box {
+    margin-top: 24px;
+    padding: 32px;
+    background: #0f1923;
+    border: 2px solid #2d3748;
+    border-radius: 12px;
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-box.result-positive {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+}
+
+.result-box.result-negative {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+}
+
+.result-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.result-icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.result-positive .result-icon {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.result-negative .result-icon {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.result-text {
+    flex: 1;
+    text-align: left;
+}
+
+.result-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.result-positive .result-title {
+    color: #10b981;
+}
+
+.result-negative .result-title {
+    color: #ef4444;
+}
+
+.result-description {
+    font-size: 15px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.result-box strong {
+    color: #ff9800;
+    font-weight: 600;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 24px;
+    }
+
+    .header {
+        margin-bottom: 30px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .predict-btn {
+        font-size: 16px;
+        padding: 16px 24px;
+    }
+
+    .result-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .result-text {
+        text-align: center;
+    }
+
+    .result-icon {
+        margin: 0 auto;
+    }
+}
+
+/* ===== Number Input Arrows (Chrome/Safari) ===== */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ===== Number Input Arrows (Firefox) ===== */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+

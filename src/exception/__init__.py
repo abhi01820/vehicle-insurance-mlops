@@ -1,7 +1,7 @@
 import sys
 import logging
 
-def error_message_detail(error: Exception, error_detail: sys) -> str:
+def error_message_detail(error: Exception | str, error_detail: sys) -> str:
     """
     Extracts detailed error information including file name, line number, and the error message.
 
@@ -10,13 +10,15 @@ def error_message_detail(error: Exception, error_detail: sys) -> str:
     :return: A formatted error message string.
     """
     
-    _, _, exc_tb = error_detail.exc_info()
+    exc_type, exc_value, exc_tb = error_detail.exc_info()
 
+    if exc_tb is not None:
+        file_name = exc_tb.tb_frame.f_code.co_filename
+        line_number = exc_tb.tb_lineno
+    else:
+        file_name = "unknown"
+        line_number = -1
 
-    file_name = exc_tb.tb_frame.f_code.co_filename
-
-
-    line_number = exc_tb.tb_lineno
     error_message = f"Error occurred in python script: [{file_name}] at line number [{line_number}]: {str(error)}"
     
     
