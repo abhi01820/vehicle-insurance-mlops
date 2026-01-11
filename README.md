@@ -206,8 +206,6 @@ Image build
 Container health check
 
 Security scanning
-
-
 ![Github Actions](assets/githubActions.png)
 
 
@@ -230,8 +228,6 @@ Response-No
 
 Ensures training-serving consistency.
 
-
-
 <p align="center">
-  <img src="banner1.png" width="700"/>
+  <img src="assets/banner1.png" width="700"/>
 </p>
