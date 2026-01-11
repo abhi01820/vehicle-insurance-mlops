@@ -33,10 +33,8 @@ class ModelTrainer:
         try:
             logging.info("Training RandomForestClassifier with specified parameters")
 
-
             x_train, y_train, x_test, y_test = train[:, :-1], train[:, -1], test[:, :-1], test[:, -1]
             logging.info("train-test split done.")
-
 
             model = RandomForestClassifier(
                 n_estimators = self.model_trainer_config._n_estimators,
@@ -48,11 +46,9 @@ class ModelTrainer:
                 class_weight = 'balanced'
             )
 
-
             logging.info("Model training going on...")
             model.fit(x_train, y_train)
             logging.info("Model training done.")
-
 
             y_pred = model.predict(x_test)
             accuracy = accuracy_score(y_test, y_pred)
@@ -84,10 +80,8 @@ class ModelTrainer:
             test_arr = load_numpy_array_data(file_path=self.data_transformation_artifact.transformed_test_file_path)
             logging.info("train-test data loaded")
             
-            
             trained_model, metric_artifact = self.get_model_object_and_report(train=train_arr, test=test_arr)
             logging.info("Model object and artifact loaded.")
-            
             
             preprocessing_obj = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
             logging.info("Preprocessing obj loaded.")
@@ -97,12 +91,10 @@ class ModelTrainer:
                 logging.info("No model found with score above the base score")
                 raise Exception("No model found with score above the base score")
 
-
             logging.info("Saving new model as performace is better than previous one.")
             my_model = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=trained_model)
             save_object(self.model_trainer_config.trained_model_file_path, my_model)
             logging.info("Saved final model object that includes both preprocessing and the trained model")
-
 
             model_trainer_artifact = ModelTrainerArtifact(
                 trained_model_file_path=self.model_trainer_config.trained_model_file_path,

@@ -47,20 +47,17 @@ class DataTransformation:
             min_max_scaler = MinMaxScaler()
             logging.info("Transformers Initialized: StandardScaler-MinMaxScaler")
 
-
             num_features = self._schema_config['num_features']
             mm_columns = self._schema_config['mm_columns']
             logging.info("Cols loaded from schema.")
-
 
             preprocessor = ColumnTransformer(
                 transformers=[
                     ("StandardScaler", numeric_transformer, num_features),
                     ("MinMaxScaler", min_max_scaler, mm_columns)
                 ],
-                remainder='passthrough'  
+                remainder='passthrough'
             )
-
 
             final_pipeline = Pipeline(steps=[("Preprocessor", preprocessor)])
             logging.info("Final Pipeline Ready!!")
@@ -112,7 +109,6 @@ class DataTransformation:
             if not self.data_validation_artifact.validation_status:
                 raise Exception(self.data_validation_artifact.message)
 
-
             train_df = self.read_data(file_path=self.data_ingestion_artifact.trained_file_path)
             test_df = self.read_data(file_path=self.data_ingestion_artifact.test_file_path)
             logging.info("Train-Test data loaded")
@@ -151,7 +147,6 @@ class DataTransformation:
             input_feature_train_final, target_feature_train_final = smt.fit_resample(
                 input_feature_train_arr, target_feature_train_df
             )
-            # Do NOT resample the test set; keep original distribution
             input_feature_test_final, target_feature_test_final = (
                 input_feature_test_arr, target_feature_test_df
             )

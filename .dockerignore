@@ -16,8 +16,7 @@ Thumbs.db
 .git/
 .gitignore
 
-# Build artifacts and logs
-artifact/
+# Logs (keep artifacts for predictions)
 logs/
 
 # Notebooks and large data

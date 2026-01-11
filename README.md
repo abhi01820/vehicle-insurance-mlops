@@ -1,5 +1,10 @@
 # MLOps Project - Vehicle Insurance Data Pipeline
 
+[![CI/CD Pipeline](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/ci-cd.yml)
+[![Docker Build](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/docker.yml/badge.svg)](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/docker.yml)
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 End-to-end production-style MLOps pipeline for vehicle insurance prediction, built to demonstrate real-world machine learning system design, pipeline orchestration, data reliability, and deployment readiness.
 
 ---
@@ -173,8 +178,72 @@ The prediction pipeline reuses the trained model and preprocessing object to ens
 
 ---
 
-## Docker Usage (Local Only)
+## 🚀 CI/CD Pipeline
 
-Docker is used **only for local containerized execution** to demonstrate deployment readiness.
+This project includes a complete CI/CD pipeline using **GitHub Actions**:
+
+### Automated Workflows
+
+1. **CI/CD Pipeline** (`.github/workflows/ci-cd.yml`)
+   - Runs on every push to main/master branch
+   - **Testing**: Linting with flake8, unit tests with pytest
+   - **Build**: Docker image creation with caching
+   - **Push**: Automated push to Docker Hub (if configured)
+   - **Deploy**: Deployment hooks (configure for your platform)
+
+2. **Docker Build & Test** (`.github/workflows/docker.yml`)
+   - Validates Dockerfile changes
+   - Tests container health endpoint
+   - Security scanning with Trivy
+
+### Setup CI/CD
+
+1. **GitHub Secrets** (Required for Docker Hub push):
+   ```
+   DOCKER_USERNAME: your-dockerhub-username
+   DOCKER_PASSWORD: your-dockerhub-token
+   ```
+
+2. **Pre-commit Hooks** (Optional but recommended):
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+
+3. **Run Tests Locally**:
+   ```bash
+   pytest tests/ --cov=src --cov-report=term
+   ```
+
+---
+
+## Docker Usage
+
+### Using Docker Compose (Recommended)
+```bash
+docker-compose up -d
+```
+
+Access at http://localhost:5000
+
+Stop:
+```bash
+docker-compose down
+```
+
+### Manual Docker Build & Run
+```bash
+docker build -t vehicle-insurance-mlops:latest .
+docker run -p 5000:5000 vehicle-insurance-mlops:latest
+```
+
+### With Volume Mounts (for artifacts)
+```bash
+docker run -p 5000:5000 \
+  -v "$(pwd)/artifact:/app/artifact" \
+  -v "$(pwd)/logs:/app/logs" \
+  --env-file .env \
+  vehicle-insurance-mlops:latest
+```
 
 

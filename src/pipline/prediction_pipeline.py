@@ -119,7 +119,6 @@ class VehicleDataClassifier:
             with open(self.model_path, "rb") as f:
                 model = pickle.load(f)
 
-            # ✅ GUARANTEE dataframe for ColumnTransformer
             if not isinstance(dataframe, pd.DataFrame):
                 dataframe = pd.DataFrame(dataframe)
 
@@ -140,7 +139,6 @@ class VehicleDataClassifier:
                 if col in dataframe.columns:
                     dataframe[col] = pd.to_numeric(dataframe[col], errors="coerce")
 
-            # If saved model is MyModel wrapper, it will handle preprocessing
             if hasattr(model, "preprocessing_object") and hasattr(model, "trained_model_object"):
                 logging.info("Detected MyModel wrapper; delegating predict")
                 prediction = model.predict(dataframe)

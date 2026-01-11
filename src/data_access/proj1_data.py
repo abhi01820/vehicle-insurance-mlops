@@ -38,13 +38,11 @@ class Proj1Data:
             DataFrame containing the collection data, with '_id' column removed and 'na' values replaced with NaN.
         """
         try:
-            
             if database_name is None:
                 collection = self.mongo_client.database[collection_name]
             else:
                 collection = self.mongo_client[database_name][collection_name]
 
-            
             print("Fetching data from mongoDB")
             df = pd.DataFrame(list(collection.find()))
             print(f"Data fecthed with len: {len(df)}")

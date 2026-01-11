@@ -67,17 +67,13 @@ class MyModel:
         try:
             logging.info("Entered MyModel.predict method")
 
-            # ✅ Force DataFrame
             if not isinstance(dataframe, pd.DataFrame):
                 dataframe = pd.DataFrame(dataframe)
 
-            # ✅ Force column alignment (THIS FIXES EVERYTHING)
             dataframe = dataframe.reindex(columns=EXPECTED_COLUMNS)
 
-            # ✅ Convert all values to numeric
             dataframe = dataframe.apply(pd.to_numeric, errors="coerce")
 
-            # ✅ Fill missing values safely
             dataframe.fillna(0, inplace=True)
 
             logging.info("Applying preprocessing pipeline")

@@ -21,7 +21,6 @@ def error_message_detail(error: Exception | str, error_detail: sys) -> str:
 
     error_message = f"Error occurred in python script: [{file_name}] at line number [{line_number}]: {str(error)}"
     
-    
     logging.error(error_message)
     
     return error_message
@@ -37,10 +36,7 @@ class MyException(Exception):
         :param error_message: A string describing the error.
         :param error_detail: The sys module to access traceback details.
         """
-        
         super().__init__(error_message)
-
-        
         self.error_message = error_message_detail(error_message, error_detail)
 
     def __str__(self) -> str:

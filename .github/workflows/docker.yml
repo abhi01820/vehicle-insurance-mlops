@@ -1,0 +1,42 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'src/**'
+      - 'app.py'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Build Docker image
+      run: |
+        docker build -t vehicle-insurance-mlops:test .
+        
+    - name: Test Docker container
+      run: |
+        docker run -d --name test-container -p 5000:5000 vehicle-insurance-mlops:test
+        sleep 10
+        curl -f http://localhost:5000/health || exit 1
+        docker stop test-container
+        docker rm test-container
+        
+    - name: Scan image for vulnerabilities
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: vehicle-insurance-mlops:test
+        format: 'table'
+        exit-code: '0'
+        ignore-unfixed: true
+        severity: 'CRITICAL,HIGH'

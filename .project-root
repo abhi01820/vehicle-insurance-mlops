@@ -1,0 +1,2 @@
+# Anchor file for `from_root` to detect project root inside Docker.
+# See: https://pypi.org/project/from-root/

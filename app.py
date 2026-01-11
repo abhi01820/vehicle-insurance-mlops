@@ -11,17 +11,10 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
 from src.constants import APP_HOST, APP_PORT
 from src.pipline.prediction_pipeline import VehicleData, VehicleDataClassifier
-"""
-Note:
-- Avoid importing heavy training dependencies at startup to keep the API
-    lightweight. We import `TrainPipeline` lazily inside the `/train` route.
-"""
-
 
 app = FastAPI()
 
@@ -87,14 +80,11 @@ class DataForm:
         Transform categorical values to encoded format for model prediction.
         Returns a dictionary with encoded values matching the training data format.
         """
-        # Gender encoding: Male=1, Female=0
         gender_encoded = 1 if self.Gender == "Male" else 0
         
-        # Vehicle Age encoding to one-hot format
         vehicle_age_lt_1 = 1 if self.Vehicle_Age == "< 1 Year" else 0
         vehicle_age_gt_2 = 1 if self.Vehicle_Age == "> 2 Years" else 0
         
-        # Vehicle Damage encoding: Yes=1, No=0
         vehicle_damage_encoded = 1 if self.Vehicle_Damage == "Yes" else 0
         
         return {
@@ -166,8 +156,6 @@ async def trainRouteClient():
     Endpoint to initiate the model training pipeline.
     """
     try:
-        # Lazy import to prevent server startup failures when training deps
-        # like `pymongo` are not present.
         from src.pipline.training_pipeline import TrainPipeline
         train_pipeline = TrainPipeline()
         train_pipeline.run_pipeline()
@@ -198,7 +186,6 @@ async def predictRouteClient(request: Request):
         form = DataForm(request)
         await form.get_vehicle_data()
         
-        # Get encoded data for model prediction
         encoded_data = form.get_encoded_data()
         
         vehicle_data = VehicleData(
@@ -222,8 +209,6 @@ async def predictRouteClient(request: Request):
 
         model_predictor = VehicleDataClassifier()
 
-
-        # Get prediction and probability (if available)
         value = model_predictor.predict(dataframe=vehicle_df)[0]
         score = None
         try:
