@@ -229,4 +229,8 @@ Response-No
 
 Ensures training-serving consistency.
 
-![banner1](banner1.png)
+## 🏗️ System Architecture
+
+<p align="center">
+  <img src="banner1.png" width="700"/>
+</p>
