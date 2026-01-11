@@ -1,52 +1,101 @@
-# MLOps Project - Vehicle Insurance Data Pipeline
 
-[![CI/CD Pipeline](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/ci-cd.yml)
-[![Docker Build](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/docker.yml/badge.svg)](https://github.com/YOUR_USERNAME/vehicle-insurance-mlops/actions/workflows/docker.yml)
-[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-End-to-end production-style MLOps pipeline for vehicle insurance prediction, built to demonstrate real-world machine learning system design, pipeline orchestration, data reliability, and deployment readiness.
+
+# 🚗 Vehicle Insurance – End-to-End MLOps Project
 
 ---
 
-## Project Overview
+## 📌 Project Overview
 
-This project focuses on the **importance of MLOps** rather than just model building.  
-It demonstrates how machine learning workflows are structured, validated, versioned, and served in a production-like environment.
+This repository contains a **complete, production-style MLOps pipeline** built to demonstrate how real-world machine learning systems are designed, automated, validated, versioned, and deployed.
 
-The system predicts whether a customer is likely to opt for vehicle insurance based on demographic and policy-related features.
+The focus of this project is **MLOps**, not just model training.  
+It showcases the full lifecycle of a machine learning system — from raw data ingestion to automated CI/CD and containerized deployment.
+
+The system predicts whether a customer is likely to opt for **vehicle insurance** based on demographic and policy-related features.
 
 ---
-## 📌 Project Structure
+
+## 🎯 Why This Is a Complete MLOps Project
+
+This is **not** a notebook-only ML project.
+
+It implements industry-grade MLOps practices such as:
+
+- Modular ML pipeline architecture
+- External data ingestion (MongoDB Atlas)
+- Schema-based data validation
+- Feature engineering & preprocessing pipelines
+- Model training and evaluation
+- Versioned artifacts (timestamp-based)
+- Centralized logging and exception handling
+- Reusable prediction pipeline
+- FastAPI-based inference service
+- Dockerized execution environment
+- CI/CD automation using GitHub Actions
+- Secure secrets management (no hardcoded credentials)
+
+---
+
+## 🏗️ End-to-End Architecture
+```
+MongoDB Atlas
+↓
+Data Ingestion
+↓
+Data Validation (Schema-based)
+↓
+Data Transformation & Feature Engineering
+↓
+Model Training & Evaluation
+↓
+Model Pusher (Artifacts)
+↓
+Prediction Pipeline (FastAPI)
+↓
+Dockerized Deployment
+↓
+CI/CD Automation (GitHub Actions)
+```
+
+
+---
+
+## 📂 Project Structure
 
 ```text
 vehicle-insurance-mlops/
 │
-├── app.py                      # FastAPI entry point for prediction service
-├── Dockerfile                  # Docker configuration for deployment
-├── requirements.txt            # Project dependencies
-├── setup.py                    # Package setup
-├── pyproject.toml              # Build system configuration
-├── README.md                   # Project documentation
+├── .github/
+│   └── workflows/
+│       ├── ci-cd.yml               # CI/CD pipeline (tests, build, push)
+│       └── docker.yml              # Docker build & validation
+│
+├── app.py                          # FastAPI entry point
+├── Dockerfile                      # Docker configuration
+├── requirements.txt                # Dependencies
+├── setup.py                        # Package setup
+├── pyproject.toml                  # Build system config
+├── README.md                       # Project documentation
 │
 ├── config/
-│   ├── schema.yaml             # Dataset schema definition
-│   └── model.yaml              # Model & training configuration
+│   ├── schema.yaml                 # Dataset schema
+│   └── model.yaml                  # Model configuration
 │
-├── artifact/                   # Versioned pipeline outputs (timestamp-based)
+├── artifact/                       # Versioned pipeline outputs
 │   └── <timestamp>/
-│       ├── data_ingestion/     # Raw & split datasets
-│       ├── data_validation/    # Validation reports
-│       ├── data_transformation/# Transformed data & preprocessors
-│       └── model_trainer/      # Trained model artifacts
+│       ├── data_ingestion/
+│       ├── data_validation/
+│       ├── data_transformation/
+│       └── model_trainer/
 │
-├── logs/                       # Centralized pipeline execution logs
+├── logs/                           # Centralized logs
 │
 ├── notebook/
-│   └── data.csv                # Sample / reference dataset
+│   └── data.csv                    # Reference dataset
 │
 ├── src/
-│   ├── components/             # Core ML pipeline components
+│   ├── components/                 # Core ML components
 │   │   ├── data_ingestion.py
 │   │   ├── data_validation.py
 │   │   ├── data_transformation.py
@@ -54,196 +103,130 @@ vehicle-insurance-mlops/
 │   │   ├── model_evaluation.py
 │   │   └── model_pusher.py
 │   │
-│   ├── pipeline/               # Training & prediction pipelines
+│   ├── pipeline/                   # Training & prediction pipelines
 │   │   ├── training_pipeline.py
 │   │   └── prediction_pipeline.py
 │   │
-│   ├── entity/                 # Configuration & artifact data classes
-│   ├── configuration/          # MongoDB / AWS connection logic
-│   ├── cloud_storage/          # AWS S3 interaction layer
-│   ├── data_access/            # Data fetching layer
-│   ├── utils/                  # Common utility functions
-│   ├── logger/                 # Centralized logging module
-│   └── exception/              # Custom exception handling
+│   ├── entity/                     # Artifact & config data classes
+│   ├── configuration/              # MongoDB / cloud config
+│   ├── cloud_storage/              # AWS S3 integration layer
+│   ├── data_access/                # Data fetching layer
+│   ├── utils/                      # Utility functions
+│   ├── logger/                     # Centralized logging
+│   └── exception/                  # Custom exceptions
 │
 ├── static/
 │   └── css/
-│       └── style.css           # UI styling
+│       └── style.css
 │
 └── templates/
-    └── vehicledata.html        # HTML template for prediction UI
+    └── vehicledata.html             # Prediction UI
+
 
 ```
 
+## 🔍 Pipeline Components
 
-## Why This Is an MLOps Project
+## 1️⃣ Data Ingestion
+Fetches data from MongoDB Atlas
 
-This is not a notebook-only ML project.  
-It showcases how real ML systems are built with:
+Performs train-test split
 
-- Modular pipeline architecture
-- Data ingestion from external sources
-- Schema-based data validation
-- Feature engineering and preprocessing pipelines
-- Model training with evaluation
-- Versioned artifacts
-- Centralized logging and exception handling
-- API-based prediction service
-- Dockerized local deployment
+Stores versioned datasets as artifacts
 
-The emphasis is on **reproducibility, reliability, and maintainability**.
+![data_ingestion](data_ingestion.png)
 
----
+ ## 2️⃣ Data Validation
 
-## End-to-End Workflow
+Schema validation using schema.yaml
 
-MongoDB  
-→ Data Ingestion  
-→ Data Validation (Schema-based)  
-→ Data Transformation & Feature Engineering  
-→ Model Training & Evaluation  
-→ Prediction Pipeline (FastAPI)  
-→ Dockerized Local Deployment  
+Column presence, datatype, and missing value checks
 
----
+Generates validation reports
 
-## Data Source
-
-- MongoDB Atlas is used as the data source
-- Data is fetched dynamically using environment variables
-- No hardcoded credentials are used
+![data_validation](data_validation.png)
 
 
+## 3️⃣ Data Transformation
+
+Feature engineering
+
+Encoding categorical variables
+
+Scaling numerical features
+
+Class imbalance handling using SMOTEENN
+
+Saves preprocessing pipeline for reuse
+
+![data_transformation](data_transformation.png)
 
 
+## 4️⃣ Model Training & Evaluation
 
----
+Model: RandomForestClassifier
 
-## Pipeline Components
+Metrics: Precision, Recall, F1-Score
 
-### Data Ingestion
-- Fetches data from MongoDB
-- Performs train-test split
-- Stores datasets as versioned artifacts
+Best model selected and saved as artifact
 
-- ![Data Ingestion](data_ingestion.png)
-
-### Data Validation
-- Schema validation using a predefined schema file
-- Checks required columns and data types
-- Generates validation reports as artifacts
-
-- ![Data Validation](data_validation.png)
-
-### Data Transformation
-- Feature engineering
-- Encoding categorical variables
-- Scaling numerical features
-- Handling class imbalance using SMOTEENN
-- Saves preprocessing pipeline for reuse
-
-- ![Data Transformation](data_transformation.png)
-
-### Model Training
-- Model trained using RandomForestClassifier
-- Evaluated using precision, recall, and F1-score
-- Best-performing model saved as a versioned artifact
+![model_training](model_training.png)
 
 
-![Model Training](model_training.png)
-
-
----
-
-## Prediction Service
-
-- Built using FastAPI
-- HTML-based form for user input
-- Accepts customer details
-- Returns prediction result:
-  - Response-Yes
-  - Response-No
- 
-  - 
-
-The prediction pipeline reuses the trained model and preprocessing object to ensure consistency.
-
----
-
-<p align="center">
-  <img src="banner1.png" alt="Local Deployment" width="400">
-</p>
-
-
-
----
-
-## 🚀 CI/CD Pipeline
-
-This project includes a complete CI/CD pipeline using **GitHub Actions**:
-
-### Automated Workflows
-
-1. **CI/CD Pipeline** (`.github/workflows/ci-cd.yml`)
-   - Runs on every push to main/master branch
-   - **Testing**: Linting with flake8, unit tests with pytest
-   - **Build**: Docker image creation with caching
-   - **Push**: Automated push to Docker Hub (if configured)
-   - **Deploy**: Deployment hooks (configure for your platform)
-
-2. **Docker Build & Test** (`.github/workflows/docker.yml`)
-   - Validates Dockerfile changes
-   - Tests container health endpoint
-   - Security scanning with Trivy
-
-### Setup CI/CD
-
-1. **GitHub Secrets** (Required for Docker Hub push):
-   ```
-   DOCKER_USERNAME: your-dockerhub-username
-   DOCKER_PASSWORD: your-dockerhub-token
-   ```
-
-2. **Pre-commit Hooks** (Optional but recommended):
-   ```bash
-   pip install pre-commit
-   pre-commit install
-   ```
-
-3. **Run Tests Locally**:
-   ```bash
-   pytest tests/ --cov=src --cov-report=term
-   ```
-
----
-
-## Docker Usage
-
-### Using Docker Compose (Recommended)
-```bash
-docker-compose up -d
+## 🐳 Dockerized Deployment
+Build & Run
 ```
 
-Access at http://localhost:5000
-
-Stop:
-```bash
-docker-compose down
+docker build -t vehicle-insurance-mlops .
+docker run -p 5000:5000 vehicle-insurance-mlops
 ```
 
-### Manual Docker Build & Run
-```bash
-docker build -t vehicle-insurance-mlops:latest .
-docker run -p 5000:5000 vehicle-insurance-mlops:latest
-```
+## 🔁 CI/CD Pipeline (GitHub Actions)
 
-### With Volume Mounts (for artifacts)
-```bash
-docker run -p 5000:5000 \
-  -v "$(pwd)/artifact:/app/artifact" \
-  -v "$(pwd)/logs:/app/logs" \
-  --env-file .env \
-  vehicle-insurance-mlops:latest
-```
+This project includes fully automated CI/CD pipelines.
+
+### ✅ CI/CD Workflow (ci-cd.yml)
+
+Triggered on every push
+
+Code checkout
+
+Linting & testing
+
+Docker image build
+
+Docker Hub push using secrets
+
+### ✅ Docker Workflow (docker.yml)
+
+Dockerfile validation
+
+Image build
+
+Container health check
+
+Security scanning
 
 
+
+
+
+
+
+## 🚀 Prediction Service
+
+Built using FastAPI
+
+HTML-based input form
+
+Reuses trained model and preprocessing pipeline
+
+Returns prediction:
+
+Response-Yes
+
+Response-No
+
+Ensures training-serving consistency.
+
+![banner1](banner1.png)
