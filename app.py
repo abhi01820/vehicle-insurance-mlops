@@ -1,20 +1,19 @@
+import os
+from datetime import datetime
+from typing import Optional
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import HTMLResponse, RedirectResponse
 from uvicorn import run as app_run
-
-from typing import Optional
-import os
-from datetime import datetime
-from dotenv import load_dotenv
-
-load_dotenv()
 
 from src.constants import APP_HOST, APP_PORT
 from src.pipline.prediction_pipeline import VehicleData, VehicleDataClassifier
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -22,8 +21,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-templates = Jinja2Templates(directory='templates')
-
+templates = Jinja2Templates(directory="templates")
 
 
 origins = ["*"]
@@ -37,12 +35,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Docker and monitoring"""
+    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
+
 class DataForm:
     """
     DataForm class to handle and process incoming form data.
     This class defines the vehicle-related attributes expected from the form.
     Now accepts user-friendly categorical values.
     """
+
     def __init__(self, request: Request):
         self.request: Request = request
         self.Gender: Optional[str] = None
@@ -55,7 +61,6 @@ class DataForm:
         self.Vintage: Optional[int] = None
         self.Vehicle_Age: Optional[str] = None
         self.Vehicle_Damage: Optional[str] = None
-                
 
     async def get_vehicle_data(self):
         """
@@ -74,19 +79,19 @@ class DataForm:
         self.Vintage = int(form.get("Vintage"))
         self.Vehicle_Age = form.get("Vehicle_Age")
         self.Vehicle_Damage = form.get("Vehicle_Damage")
-    
+
     def get_encoded_data(self):
         """
         Transform categorical values to encoded format for model prediction.
         Returns a dictionary with encoded values matching the training data format.
         """
         gender_encoded = 1 if self.Gender == "Male" else 0
-        
+
         vehicle_age_lt_1 = 1 if self.Vehicle_Age == "< 1 Year" else 0
         vehicle_age_gt_2 = 1 if self.Vehicle_Age == "> 2 Years" else 0
-        
+
         vehicle_damage_encoded = 1 if self.Vehicle_Damage == "Yes" else 0
-        
+
         return {
             "Gender": gender_encoded,
             "Age": self.Age,
@@ -98,7 +103,7 @@ class DataForm:
             "Vintage": self.Vintage,
             "Vehicle_Age_lt_1_Year": vehicle_age_lt_1,
             "Vehicle_Age_gt_2_Years": vehicle_age_gt_2,
-            "Vehicle_Damage_Yes": vehicle_damage_encoded
+            "Vehicle_Damage_Yes": vehicle_damage_encoded,
         }
 
 
@@ -107,6 +112,7 @@ async def index(request: Request):
     """
     Renders the main HTML form page for vehicle data input.
     """
+
     # Build basic MLOps status to display on UI
     def find_latest_artifact(base_dir: str):
         try:
@@ -139,7 +145,8 @@ async def index(request: Request):
     mlops = {
         "artifact": latest_name,
         "stages": {
-            "data_ingestion": exists(os.path.join("data_ingestion", "ingested", "train.csv")) and exists(os.path.join("data_ingestion", "ingested", "test.csv")),
+            "data_ingestion": exists(os.path.join("data_ingestion", "ingested", "train.csv"))
+            and exists(os.path.join("data_ingestion", "ingested", "test.csv")),
             "data_validation": exists(os.path.join("data_validation", "report.yaml")),
             "data_transformation": exists(os.path.join("data_transformation", "transformed_object", "preprocessing.pkl")),
             "model_trainer": exists(os.path.join("model_trainer", "trained_model", "model.pkl")),
@@ -147,7 +154,8 @@ async def index(request: Request):
     }
 
     return templates.TemplateResponse(
-            "vehicledata.html",{"request": request, "context": "Rendering", "score": None, "mlops": mlops})
+        "vehicledata.html", {"request": request, "context": "Rendering", "score": None, "mlops": mlops}
+    )
 
 
 @app.get("/train")
@@ -157,6 +165,7 @@ async def trainRouteClient():
     """
     try:
         from src.pipline.training_pipeline import TrainPipeline
+
         train_pipeline = TrainPipeline()
         train_pipeline.run_pipeline()
         return Response("Training successful!!!")
@@ -170,7 +179,8 @@ async def health():
     """Return health status including artifact availability."""
     try:
         from src.pipline.prediction_pipeline import VehicleDataClassifier
-        clf = VehicleDataClassifier()
+
+        VehicleDataClassifier()
         # Check files exist by accessing paths
         return {"status": True}
     except Exception as e:
@@ -185,27 +195,24 @@ async def predictRouteClient(request: Request):
     try:
         form = DataForm(request)
         await form.get_vehicle_data()
-        
+
         encoded_data = form.get_encoded_data()
-        
+
         vehicle_data = VehicleData(
-                                Gender=encoded_data["Gender"],
-                                Age=encoded_data["Age"],
-                                Driving_License=encoded_data["Driving_License"],
-                                Region_Code=encoded_data["Region_Code"],
-                                Previously_Insured=encoded_data["Previously_Insured"],
-                                Annual_Premium=encoded_data["Annual_Premium"],
-                                Policy_Sales_Channel=encoded_data["Policy_Sales_Channel"],
-                                Vintage=encoded_data["Vintage"],
-                                Vehicle_Age_lt_1_Year=encoded_data["Vehicle_Age_lt_1_Year"],
-                                Vehicle_Age_gt_2_Years=encoded_data["Vehicle_Age_gt_2_Years"],
-                                Vehicle_Damage_Yes=encoded_data["Vehicle_Damage_Yes"]
-                                )
-
-
+            Gender=encoded_data["Gender"],
+            Age=encoded_data["Age"],
+            Driving_License=encoded_data["Driving_License"],
+            Region_Code=encoded_data["Region_Code"],
+            Previously_Insured=encoded_data["Previously_Insured"],
+            Annual_Premium=encoded_data["Annual_Premium"],
+            Policy_Sales_Channel=encoded_data["Policy_Sales_Channel"],
+            Vintage=encoded_data["Vintage"],
+            Vehicle_Age_lt_1_Year=encoded_data["Vehicle_Age_lt_1_Year"],
+            Vehicle_Age_gt_2_Years=encoded_data["Vehicle_Age_gt_2_Years"],
+            Vehicle_Damage_Yes=encoded_data["Vehicle_Damage_Yes"],
+        )
 
         vehicle_df = vehicle_data.get_vehicle_input_data_frame()
-
 
         model_predictor = VehicleDataClassifier()
 
@@ -218,7 +225,7 @@ async def predictRouteClient(request: Request):
             score = None
 
         status = "Response-Yes" if int(value) == 1 else "Response-No"
-        
+
         # Pass form data back to template to preserve user selections
         form_data = {
             "Gender": form.Gender,
@@ -230,14 +237,14 @@ async def predictRouteClient(request: Request):
             "Policy_Sales_Channel": form.Policy_Sales_Channel,
             "Vintage": form.Vintage,
             "Vehicle_Age": form.Vehicle_Age,
-            "Vehicle_Damage": form.Vehicle_Damage
+            "Vehicle_Damage": form.Vehicle_Damage,
         }
 
         return templates.TemplateResponse(
             "vehicledata.html",
             {"request": request, "context": status, "score": score, "form_data": form_data},
         )
-        
+
     except Exception as e:
         return {"status": False, "error": f"{e}"}
 
