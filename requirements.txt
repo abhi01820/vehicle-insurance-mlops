@@ -19,3 +19,6 @@ uvicorn
 jinja2
 imblearn
 python-dotenv
+pytest
+pytest-cov
+httpx
